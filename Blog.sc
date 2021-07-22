@@ -1,4 +1,6 @@
 import $ivy.`com.lihaoyi::scalatags:0.9.1`, scalatags.Text.all._
+import $ivy.`com.atlassian.commonmark:commonmark:0.13.1`
+
 interp.watch(os.pwd / "post")
 val postInfo = os
     .list(os.pwd / "post")
@@ -22,3 +24,23 @@ os.write(
         )
     )
 )
+
+def mdNameToHtml(name: String) = name.replace(" ", "-").toLowerCase +  ".html"
+
+for ((_, suffix, path) <- postInfo) {
+    val parser = org.commonmark.parser.Parser.builder().build()
+    val document = parser.parse(os.read(path))
+    val renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build()
+    val output = renderer.render(document)
+    os.write(
+        os.pwd / "out" / "post" / mdNameToHtml(suffix),
+        doctype("html")(
+            html(
+                body(
+                    h1("Blog", " / ", suffix), 
+                    raw(output)
+                )
+            )
+        )
+    )
+}
