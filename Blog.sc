@@ -7,7 +7,11 @@ import $ivy.`com.atlassian.commonmark:commonmark:0.13.1`
         .list(os.pwd / "post")
         .map { p => 
             val s"$prefix - $suffix.md" = p.last
-            (prefix, suffix, p)
+            val publishDate = java.time.LocalDate.ofInstant(
+                java.time.Instant.ofEpochMilli(os.mtime(p)),
+                java.time.ZoneOffset.UTC
+            )
+            (prefix, suffix, p, publishDate)
         }
         .sortBy(_._1.toInt)
 
@@ -24,7 +28,7 @@ import $ivy.`com.atlassian.commonmark:commonmark:0.13.1`
     os.makeDir.all(os.pwd / "out" / "post")
 
 
-    for ((_, suffix, path) <- postInfo) {
+    for ((_, suffix, path, publishDate) <- postInfo) {
         val parser = org.commonmark.parser.Parser.builder().build()
         val document = parser.parse(os.read(path))
         val renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build()
@@ -36,7 +40,8 @@ import $ivy.`com.atlassian.commonmark:commonmark:0.13.1`
                     head(bootstrapCss),
                     body(
                         h1(a(href := "../index.html")("Blog"), " / ", suffix), 
-                        raw(output)
+                        raw(output),
+                        p(i("Written on " + publishDate))
                     )
                 )
             )
@@ -51,8 +56,11 @@ import $ivy.`com.atlassian.commonmark:commonmark:0.13.1`
                 head(bootstrapCss),
                 body(
                     h1("Blog"),
-                    for ((_, suffix, _) <- postInfo)
-                    yield h2(a(href := ("post/" + mdNameToHtml(suffix)), suffix))
+                    for ((_, suffix, _, publishDate) <- postInfo)
+                    yield frag(
+                        h2(a(href := ("post/" + mdNameToHtml(suffix)), suffix)),
+                        p(i("Written on " + publishDate))
+                    )
                 )
             )
         )
