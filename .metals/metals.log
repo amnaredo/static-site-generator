@@ -127,3 +127,12 @@ WARNING: Unmatched cancel notification for request id 4261
 [0m2021.07.23 14:09:48 INFO  skipping build import with status 'Requested'[0m
 [0m2021.07.23 14:10:33 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
 [0m2021.07.23 14:10:33 INFO  skipping build import with status 'Requested'[0m
+Jul 23, 2021 2:18:31 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 5396
+[0m2021.07.23 14:19:48 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 14:20:54 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 14:20:56 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 14:20:56 INFO  skipping build import with status 'Dismissed'[0m
+[0m2021.07.23 14:23:21 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 14:23:51 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 14:23:51 INFO  skipping build import with status 'Dismissed'[0m

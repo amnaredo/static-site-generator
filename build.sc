@@ -22,42 +22,42 @@ def bootstrap = T{
     PathRef(T.dest / "bootstrap.css")
 }
 
+def renderMarkdown(s: String) = {
+    val parser = org.commonmark.parser.Parser.builder().build()
+    val document = parser.parse(s)
+    val renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build()
+    renderer.render(document)
+}
+def renderHtmlPage(dest: os.Path, bootstrapUrl: String, contents: Frag*) = {
+    os.write(
+        dest,
+        doctype("html")(
+            html(head(link(rel := "stylesheet", href := bootstrapUrl)), body(contents))
+        )
+    )
+    PathRef(dest)
+}
+
 object post extends Cross[PostModule](postInfo.map(_._1):_*)
 class PostModule(number: String) extends Module{
     val Some((_, suffix, markdownPath)) = postInfo.find(_._1 == number)
     def path = T.source(markdownPath)
     def preview = T{
-        val parser = org.commonmark.parser.Parser.builder().build()
-        val firstPara = os.read.lines(path().path).takeWhile(_.nonEmpty)
-        val document = parser.parse(firstPara.mkString("\n"))
-        val renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build()
-        val output = renderer.render(document)
-        output
+        renderMarkdown(os.read.lines(path().path).takeWhile(_.nonEmpty).mkString("\n"))
     }
     def render = T{ 
-        val parser = org.commonmark.parser.Parser.builder().build()
-        val document = parser.parse(os.read(path().path))
-        val renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build()
-        val output = renderer.render(document)
-        os.write(
+        renderHtmlPage(
             T.dest / mdNameToHtml(suffix),
-            doctype("html")(
-                html(
-                    head(link(rel := "stylesheet", href := "../bootstrap")),
-                    body(
-                        h1(a(href := "../index.html")("Blog"), " / ", suffix), 
-                        raw(output)
-                    )
-                )
-            )
+            "../bootstrap.css",
+            h1(a(href := "../index.html")("Blog"), " / ", suffix),
+            raw(renderMarkdown(os.read(path().path)))
         )
-        PathRef(T.dest / mdNameToHtml(suffix))
     }
 }
 
 def links = T.input{ postInfo.map(_._2) }
-val previews = T.sequence(postInfo.map(_._1).map(post(_).preview))
 val posts = T.sequence(postInfo.map(_._1).map(post(_).render))
+val previews = T.sequence(postInfo.map(_._1).map(post(_).preview))
 
 def index = T {
     os.write(
