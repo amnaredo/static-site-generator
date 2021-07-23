@@ -105,3 +105,17 @@ Caused by: scala.reflect.internal.Symbols$CyclicReference: illegal cyclic refere
 [0m2021.07.23 11:40:39 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
 [0m2021.07.23 11:44:23 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
 [0m2021.07.23 11:44:54 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 12:04:15 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 12:04:40 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 13:45:32 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 13:46:12 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 13:46:12 INFO  skipping build import with status 'Dismissed'[0m
+Jul 23, 2021 1:47:44 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 3268
+Jul 23, 2021 1:47:44 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 3270
+Jul 23, 2021 1:47:47 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 3286
+[0m2021.07.23 13:48:14 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 13:50:57 WARN  no build target for: /mnt/c/Users/Alejandro/haoyi/static-site-generator/build.sc[0m
+[0m2021.07.23 13:50:57 INFO  skipping build import with status 'Requested'[0m

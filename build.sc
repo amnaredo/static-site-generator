@@ -13,10 +13,14 @@ val postInfo = interp.watchValue {
     .sortBy(_._1.toInt)
 }
 
-val bootstrapCss = link(
-    rel := "stylesheet",
-    href := "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.css"
-)
+def bootstrap = T{
+    os.write(
+        T.dest / "bootstrap.css",
+        requests.get("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.css")
+            .text()
+    )
+    PathRef(T.dest / "bootstrap.css")
+}
 
 object post extends Cross[PostModule](postInfo.map(_._1):_*)
 class PostModule(number: String) extends Module{
@@ -31,7 +35,7 @@ class PostModule(number: String) extends Module{
             T.dest / mdNameToHtml(suffix),
             doctype("html")(
                 html(
-                    head(bootstrapCss),
+                    head(link(rel := "stylesheet", href := "../bootstrap")),
                     body(
                         h1(a(href := "../index.html")("Blog"), " / ", suffix), 
                         raw(output)
@@ -52,7 +56,7 @@ def index = T {
         T.dest / "index.html",
         doctype("html")(
             html(
-                head(bootstrapCss),
+                head(link(rel := "stylesheet", href := "../bootstrap.css")),
                 body(
                     h1("Blog"),
                     for (suffix <- links())
@@ -69,5 +73,6 @@ def dist = T {
         os.copy(post.path, T.dest / "post" / post.path.last, createFolders = true)
     }
     os.copy(index().path, T.dest / "index.html")
+    os.copy(bootstrap().path, T.dest / "bootstrap.css")
     PathRef(T.dest)
 }
