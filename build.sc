@@ -26,6 +26,14 @@ object post extends Cross[PostModule](postInfo.map(_._1):_*)
 class PostModule(number: String) extends Module{
     val Some((_, suffix, markdownPath)) = postInfo.find(_._1 == number)
     def path = T.source(markdownPath)
+    def preview = T{
+        val parser = org.commonmark.parser.Parser.builder().build()
+        val firstPara = os.read.lines(path().path).takeWhile(_.nonEmpty)
+        val document = parser.parse(firstPara.mkString("\n"))
+        val renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build()
+        val output = renderer.render(document)
+        output
+    }
     def render = T{ 
         val parser = org.commonmark.parser.Parser.builder().build()
         val document = parser.parse(os.read(path().path))
@@ -48,7 +56,7 @@ class PostModule(number: String) extends Module{
 }
 
 def links = T.input{ postInfo.map(_._2) }
-
+val previews = T.sequence(postInfo.map(_._1).map(post(_).preview))
 val posts = T.sequence(postInfo.map(_._1).map(post(_).render))
 
 def index = T {
@@ -59,8 +67,11 @@ def index = T {
                 head(link(rel := "stylesheet", href := "../bootstrap.css")),
                 body(
                     h1("Blog"),
-                    for (suffix <- links())
-                    yield h2(a(href := ("post/" + mdNameToHtml(suffix)), suffix))
+                    for ((suffix, preview) <- links().zip(previews()))
+                    yield frag(
+                        h2(a(href := ("post/" + mdNameToHtml(suffix)), suffix)),
+                        raw(preview) // include markdown-generated HTML "raw" without HTML-escaping it
+                    )
                 )
             )
         )
